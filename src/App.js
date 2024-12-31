@@ -1,24 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import './Card.css';
+
+const cards = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+
+function Card({ note }) {
+  return (
+    <div class="card">
+      {note}
+      <div class="container">
+        {note} Major
+      </div>
+    </div>
+  );
+}
+
+function ShowCards() {
+  return (
+    <div>
+      {cards.map((card, index) => (
+        <Card key={index} note={card} />
+      ))}
+    </div>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ShowCards />
   );
 }
 
