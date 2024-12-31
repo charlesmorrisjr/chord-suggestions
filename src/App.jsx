@@ -49,7 +49,18 @@ function ShowCards() {
 
 function App() {
   return (
-    <ShowCards />
+    <div className='container'>
+      <div className='left'>
+        <ShowCards />
+      </div>
+      <div className='right'>
+        <ShowCards />
+      </div>  
+      <div className='bottom'>
+        Bottom content
+      </div>
+    </div>
+
   );
 }
 
