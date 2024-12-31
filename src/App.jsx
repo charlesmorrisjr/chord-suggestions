@@ -7,10 +7,7 @@ function Card({ note, onDelete, id }) {
   return (
     <div className="card">
       {note}
-      <div className="container">
-        {note} Major
-      </div>
-      <button onClick={() => onDelete(id)}>Delete</button>
+      <button className='delete-btn' onClick={() => onDelete(id)}>x</button>
     </div>
   );
 }
@@ -24,11 +21,11 @@ Card.propTypes = {
 function ShowCards() {
   const [cards, setCards] = useState([
     { id: 1, note: 'C' },
-    { id: 2, note: 'D' },
+    { id: 2, note: 'Dm' },
     { id: 3, note: 'E' },
-    { id: 4, note: 'F' },
-    { id: 5, note: 'G' },
-    { id: 6, note: 'A' },
+    { id: 4, note: 'Fmaj7' },
+    { id: 5, note: 'G7' },
+    { id: 6, note: 'A/F' },
     { id: 7, note: 'B' }
   ]);
   
