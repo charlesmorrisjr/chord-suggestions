@@ -33,27 +33,20 @@ ChordCard.propTypes = {
 };
 
 function ShowListCards() {
-  const [cards, setCards] = useState([
-    { id: 1, note: 'C' },
-    { id: 2, note: 'Dm' },
-    { id: 3, note: 'E' },
-    { id: 4, note: 'Fmaj7' },
-    { id: 5, note: 'G7' },
-    { id: 6, note: 'A/F' },
-    { id: 7, note: 'B' }
-  ]);
+  const [cards, setCards] = useState(['C', 'Dm', 'E', 'Fmaj7', 'G7', 'A/F', 'B']);
   
   function handleDelete(cardId) {
-    setCards(cards.filter(card => card.id !== cardId));
+    // Remove the card from the list
+    setCards(cards.filter((card, id) => id !== cardId));
   }
 
   return (
     <div>
-      {cards.map((card) => (
+      {cards.map((note, id) => (
         <ListCard 
-          key={card.id} 
-          id={card.id}
-          note={card.note}
+          key={id} 
+          id={id}
+          note={note}
           onDelete={handleDelete}
         />
       ))}
