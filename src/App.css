@@ -10,7 +10,7 @@
     "left right"
     "bottom bottom";
   height: 100vh;
-  gap: 10px; /* Optional: adds spacing between grid items */
+  gap: 10px;
 }
 
 .left {
@@ -27,8 +27,10 @@
 
 .bottom {
   grid-area: bottom;
-  height: 100px; /* Or whatever height you prefer */
+  height: 100px;
 }
+
+/* Scrollbar styling */
 
 .left::-webkit-scrollbar,
 .right::-webkit-scrollbar {

@@ -3,22 +3,36 @@ import './Card.css';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-function Card({ id, note, onDelete }) {
+function ListCard({ id, note, onDelete }) {
   return (
     <div className="card">
       {note}
-      {onDelete && <button className='delete-btn' onClick={() => onDelete(id)}>x</button>}
+      <button className='delete-btn' onClick={() => onDelete(id)}>x</button>
     </div>
   );
 }
 
-Card.propTypes = {
+function ChordCard({ id, note, onChoose }) {
+  return (
+    <div className="card" onClick={() => onChoose(id)}>
+      {note}
+    </div>
+  );
+}
+
+ListCard.propTypes = {
+  id: PropTypes.number.isRequired,
   note: PropTypes.string.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired
+  onDelete: PropTypes.func.isRequired
 };
 
-function ShowCards() {
+ChordCard.propTypes = {
+  id: PropTypes.number.isRequired,
+  note: PropTypes.string.isRequired,
+  onChoose: PropTypes.func.isRequired
+};
+
+function ShowListCards() {
   const [cards, setCards] = useState([
     { id: 1, note: 'C' },
     { id: 2, note: 'Dm' },
@@ -36,7 +50,7 @@ function ShowCards() {
   return (
     <div>
       {cards.map((card) => (
-        <Card 
+        <ListCard 
           key={card.id} 
           id={card.id}
           note={card.note}
@@ -47,7 +61,7 @@ function ShowCards() {
   );
 }
 
-function ShowChordChoices() {
+function ShowChordCards() {
   const [chords, setChords] = useState([
     { id: 1, note: 'C' },
     { id: 2, note: 'D' },
@@ -58,13 +72,18 @@ function ShowChordChoices() {
     { id: 7, note: 'B' }
   ]);
 
+  function handleChoose(cardId) {
+    alert(`You have chosen ${chords.find(chord => chord.id === cardId).note} chord`);
+  }
+
   return (
     <div>
       {chords.map((chord) => (
-        <Card 
+        <ChordCard 
           key={chord.id} 
           id={chord.id}
           note={chord.note}
+          onChoose={handleChoose}
         />
       ))}
     </div>
@@ -75,10 +94,10 @@ function App() {
   return (
     <div className='container'>
       <div className='left'>
-        <ShowCards />
+        <ShowListCards />
       </div>
       <div className='right'>
-        <ShowChordChoices />
+        <ShowChordCards />
       </div>  
       <div className='bottom'>
         Bottom content
