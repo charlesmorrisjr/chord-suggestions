@@ -4,20 +4,39 @@
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: 1fr 1fr; /* Creates two equal columns */
+  grid-template-rows: 1fr auto; /* First row takes remaining space, second row for bottom content */
+  grid-template-areas: 
+    "left right"
+    "bottom bottom";
+  height: 100vh;
+  gap: 10px; /* Optional: adds spacing between grid items */
 }
 
 .left {
-  grid-column: 1;
+  grid-area: left;
+  overflow-y: auto;
+  padding: 10px;
 }
 
 .right {
-  grid-column: 2;
+  grid-area: right;
+  overflow-y: auto;
+  padding: 10px;
 }
 
 .bottom {
-  grid-column: 1 / span 2;  /* Makes the bottom div span both columns */
+  grid-area: bottom;
+  height: 100px; /* Or whatever height you prefer */
+}
+
+.left::-webkit-scrollbar,
+.right::-webkit-scrollbar {
+  width: 8px;
+}
+
+.left::-webkit-scrollbar-thumb,
+.right::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
 }
