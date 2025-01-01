@@ -3,11 +3,11 @@ import './Card.css';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-function Card({ note, onDelete, id }) {
+function Card({ id, note, onDelete }) {
   return (
     <div className="card">
       {note}
-      <button className='delete-btn' onClick={() => onDelete(id)}>x</button>
+      {onDelete && <button className='delete-btn' onClick={() => onDelete(id)}>x</button>}
     </div>
   );
 }
@@ -47,6 +47,30 @@ function ShowCards() {
   );
 }
 
+function ShowChordChoices() {
+  const [chords, setChords] = useState([
+    { id: 1, note: 'C' },
+    { id: 2, note: 'D' },
+    { id: 3, note: 'E' },
+    { id: 4, note: 'F' },
+    { id: 5, note: 'G' },
+    { id: 6, note: 'A' },
+    { id: 7, note: 'B' }
+  ]);
+
+  return (
+    <div>
+      {chords.map((chord) => (
+        <Card 
+          key={chord.id} 
+          id={chord.id}
+          note={chord.note}
+        />
+      ))}
+    </div>
+  );
+}
+
 function App() {
   return (
     <div className='container'>
@@ -54,7 +78,7 @@ function App() {
         <ShowCards />
       </div>
       <div className='right'>
-        <ShowCards />
+        <ShowChordChoices />
       </div>  
       <div className='bottom'>
         Bottom content
