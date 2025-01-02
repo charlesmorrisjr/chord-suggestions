@@ -1,0 +1,182 @@
+[
+    {
+        "chord_ID": "1",
+        "chord_HTML": "I"
+    },
+    {
+        "chord_ID": "4",
+        "chord_HTML": "IV"
+    },
+    {
+        "chord_ID": "6",
+        "chord_HTML": "vi"
+    },
+    {
+        "chord_ID": "5",
+        "chord_HTML": "V"
+    },
+    {
+        "chord_ID": "2",
+        "chord_HTML": "ii"
+    },
+    {
+        "chord_ID": "3",
+        "chord_HTML": "iii"
+    },
+    {
+        "chord_ID": "27",
+        "chord_HTML": "ii<sup>7</sup>"
+    },
+    {
+        "chord_ID": "47",
+        "chord_HTML": "IV<sup>7</sup>"
+    },
+    {
+        "chord_ID": "67",
+        "chord_HTML": "vi<sup>7</sup>"
+    },
+    {
+        "chord_ID": "16",
+        "chord_HTML": "I<sup>6</sup>"
+    },
+    {
+        "chord_ID": "56",
+        "chord_HTML": "V<sup>6</sup>"
+    },
+    {
+        "chord_ID": "5/6",
+        "chord_HTML": "V/vi"
+    },
+    {
+        "chord_ID": "37",
+        "chord_HTML": "iii<sup>7</sup>"
+    },
+    {
+        "chord_ID": "164",
+        "chord_HTML": "I<sup>6</sup><sub>4</sub>"
+    },
+    {
+        "chord_ID": "57",
+        "chord_HTML": "V<sup>7</sup>"
+    },
+    {
+        "chord_ID": "b7",
+        "chord_HTML": "&#9837;VII"
+    },
+    {
+        "chord_ID": "17",
+        "chord_HTML": "I<sup>7</sup>"
+    },
+    {
+        "chord_ID": "5/5",
+        "chord_HTML": "V/V"
+    },
+    {
+        "chord_ID": "664",
+        "chord_HTML": "vi<sup>6</sup><sub>4</sub>"
+    },
+    {
+        "chord_ID": "464",
+        "chord_HTML": "IV<sup>6</sup><sub>4</sub>"
+    },
+    {
+        "chord_ID": "57/6",
+        "chord_HTML": "V<sup>7</sup>/vi"
+    },
+    {
+        "chord_ID": "46",
+        "chord_HTML": "IV<sup>6</sup>"
+    },
+    {
+        "chord_ID": "66",
+        "chord_HTML": "vi<sup>6</sup>"
+    },
+    {
+        "chord_ID": "564",
+        "chord_HTML": "V<sup>6</sup><sub>4</sub>"
+    },
+    {
+        "chord_ID": "642",
+        "chord_HTML": "vi<sup>4</sup><sub>2</sub>"
+    },
+    {
+        "chord_ID": "26",
+        "chord_HTML": "ii<sup>6</sup>"
+    },
+    {
+        "chord_ID": "36",
+        "chord_HTML": "iii<sup>6</sup>"
+    },
+    {
+        "chord_ID": "56/6",
+        "chord_HTML": "V<sup>6</sup>/vi"
+    },
+    {
+        "chord_ID": "b6",
+        "chord_HTML": "&#9837;VI"
+    },
+    {
+        "chord_ID": "364",
+        "chord_HTML": "iii<sup>6</sup><sub>4</sub>"
+    },
+    {
+        "chord_ID": "b3",
+        "chord_HTML": "&#9837;III"
+    },
+    {
+        "chord_ID": "265",
+        "chord_HTML": "ii<sup>6</sup><sub>5</sub>"
+    },
+    {
+        "chord_ID": "542",
+        "chord_HTML": "V<sup>4</sup><sub>2</sub>"
+    },
+    {
+        "chord_ID": "b4",
+        "chord_HTML": "iv"
+    },
+    {
+        "chord_ID": "365",
+        "chord_HTML": "iii<sup>6</sup><sub>5</sub>"
+    },
+    {
+        "chord_ID": "7",
+        "chord_HTML": "vii&deg;"
+    },
+    {
+        "chord_ID": "264",
+        "chord_HTML": "ii<sup>6</sup><sub>4</sub>"
+    },
+    {
+        "chord_ID": "5/2",
+        "chord_HTML": "V/ii"
+    },
+    {
+        "chord_ID": "57/2",
+        "chord_HTML": "V<sup>7</sup>/ii"
+    },
+    {
+        "chord_ID": "7/6",
+        "chord_HTML": "vii&deg;/vi"
+    },
+    {
+        "chord_ID": "665",
+        "chord_HTML": "vi<sup>6</sup><sub>5</sub>"
+    },
+    {
+        "chord_ID": "57/5",
+        "chord_HTML": "V<sup>7</sup>/V"
+    },
+    {
+        "chord_ID": "57/4",
+        "chord_HTML": "V<sup>7</sup>/IV"
+    },
+    {
+        "chord_ID": "242",
+        "chord_HTML": "ii<sup>4</sup><sub>2</sub>"
+    },
+    {
+        "chord_ID": "77",
+        "chord_HTML": "vii<sup>??</sup><sup>7</sup>"
+    }
+]

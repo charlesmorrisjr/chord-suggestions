@@ -2,13 +2,14 @@ import './App.css';
 import './Card.css';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import chordData from './data/chords.json';
 
 const API_BASE_URL = 'https://api.hooktheory.com/v1/';
 const AUTH_ENDPOINT = 'users/auth';
 const TRENDS_ENDPOINT = 'trends/nodes';
 
-const chordList = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-const cardList = ['C', 'Am'];
+const chordList = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii'];
+const cardList = ['I'];
 
 ShowListCards.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -69,7 +70,7 @@ function ShowListCards({ cards, setCards }) {
 }
 
 function ShowChordCards({ addCard }) {
-  const [chords, setChords] = useState(['C', 'D', 'E', 'F', 'G', 'A', 'B']);
+  const [chords, setChords] = useState(chordList);
   const [selectedChord, setSelectedChord] = useState('');
   const chordExt = ['', 'min', '7', 'M7', 'min7', 'sus4', 'dim', 'dim7', 'aug', '6', '9', '11', '13'];
 
@@ -167,6 +168,9 @@ function App() {
   const addCard = (newCard) => {
     setCards([...cards, newCard]);
   }
+
+  // Debug
+  console.log(chordData.find(chord => chord.chord_HTML === "IV"));
 
   return (
     <div className='container'>
