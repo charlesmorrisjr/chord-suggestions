@@ -1,7 +1,11 @@
 import './App.css';
 import './Card.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+
+const API_BASE_URL = 'https://api.hooktheory.com/v1/';
+const AUTH_ENDPOINT = 'users/auth';
+const TRENDS_ENDPOINT = 'trends/nodes';
 
 const chordList = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const cardList = ['C', 'Am'];
@@ -104,6 +108,61 @@ function ShowChordCards({ addCard }) {
 
 function App() {
   const [cards, setCards] = useState(cardList);
+  const [authToken, setAuthToken] = useState(null);
+  const [error, setError] = useState(null);
+
+  const authenticate = async (username, password) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINT}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (!response.ok) {
+        throw new Error('Authentication failed');
+      }
+
+      const data = await response.json();
+      setAuthToken(data.activkey);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Fetch chord progressions
+  const fetchChordProgressions = async (childPath = '') => {
+    if (!authToken) return;
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}${TRENDS_ENDPOINT}${childPath ? `?cp=${childPath}` : ''}`, 
+        {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Accept': 'application/json',
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch chord progressions');
+      }
+
+      const data = await response.json();
+      // Output chord progression data
+      console.log('Chord progressions:', data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Authenticate the user on component mount
+  useEffect(() => {
+    authenticate(import.meta.env.VITE_HOOKTHEORY_USERNAME, import.meta.env.VITE_HOOKTHEORY_PASSWORD);
+  }, []);
 
   const addCard = (newCard) => {
     setCards([...cards, newCard]);
@@ -119,6 +178,7 @@ function App() {
       </div>  
       <div className='bottom'>
         Bottom content
+        <button onClick={() => fetchChordProgressions()}>Fetch chord progressions</button>
       </div>
     </div>
 
