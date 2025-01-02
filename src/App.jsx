@@ -3,24 +3,8 @@ import './Card.css';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const cardList = ['C', 'Dm', 'E', 'Fmaj7', 'G7', 'A/F', 'B'];
-
-function ListCard({ id, note, onDelete }) {
-  return (
-    <div className="card">
-      {note}
-      <button className='delete-btn' onClick={() => onDelete(id)}>x</button>
-    </div>
-  );
-}
-
-function ChordCard({ id, note, onAdd }) {
-  return (
-    <div className="card" onClick={() => onAdd(id)}>
-      {note}
-    </div>
-  );
-}
+const chordList = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const cardList = ['C', 'Am'];
 
 ShowListCards.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -40,8 +24,25 @@ ListCard.propTypes = {
 ChordCard.propTypes = {
   id: PropTypes.number.isRequired,
   note: PropTypes.string.isRequired,
-  onAdd: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired
 };
+
+function ListCard({ id, note, onDelete }) {
+  return (
+    <div className="card">
+      {note}
+      <button className='delete-btn' onClick={() => onDelete(id)}>x</button>
+    </div>
+  );
+}
+
+function ChordCard({ id, note, onSelect }) {
+  return (
+    <div className="card" onClick={() => onSelect(id)}>
+      {note}
+    </div>
+  );
+}
 
 function ShowListCards({ cards, setCards }) {    
   function handleDelete(cardId) {
@@ -64,29 +65,37 @@ function ShowListCards({ cards, setCards }) {
 }
 
 function ShowChordCards({ addCard }) {
-  const [chords, setChords] = useState([
-    { id: 1, note: 'C' },
-    { id: 2, note: 'D' },
-    { id: 3, note: 'E' },
-    { id: 4, note: 'F' },
-    { id: 5, note: 'G' },
-    { id: 6, note: 'A' },
-    { id: 7, note: 'B' }
-  ]);
+  const [chords, setChords] = useState(['C', 'D', 'E', 'F', 'G', 'A', 'B']);
+  const [selectedChord, setSelectedChord] = useState('');
+  const chordExt = ['', 'min', '7', 'M7', 'min7', 'sus4', 'dim', 'dim7', 'aug', '6', '9', '11', '13'];
+
+  function handleChordClick(chordId) {
+    // Get the selected chord
+    const chord = chords[chordId];
+    setSelectedChord(chord);
+
+    // Create combination of the selected chord with extensions
+    const combinations = chordExt.map(ext => chord + ext);
+    setChords(combinations);
+  }
 
   function handleAdd(cardId) {
     // Add the card to the card list
-    addCard(chords.find(chord => chord.id === cardId).note);
+    addCard(chords[cardId]);
+    
+    // Reset the chord list and selected chord
+    setChords(chordList);
+    setSelectedChord('');
   }
-
+  
   return (
     <div>
-      {chords.map((chord) => (
+      {chords.map((chord, id) => (
         <ChordCard 
-          key={chord.id} 
-          id={chord.id}
-          note={chord.note}
-          onAdd={handleAdd}
+          key={id} 
+          id={id}
+          note={chord}
+          onSelect={selectedChord === '' ? handleChordClick : handleAdd}
         />
       ))}
     </div>
