@@ -100,12 +100,12 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
     
     if (cards.length === 0) return;
     
-    // Get the last chord from the progression
-    const lastChord = cards[cards.length - 1];
-    const lastChordID = chordData.find(chord => chord.chord_HTML === lastChord).chord_ID;
+    // Convert the card list to chord IDs to send to the API
+    let cardListString = cards.map(card => chordData.find(chord => chord.chord_HTML === card).chord_ID).join(',');
+    console.log(cardListString);
     
     // Fetch and process the next possible chords
-    const nextChords = await fetchNextChords(lastChordID);
+    const nextChords = await fetchNextChords(cardListString);
     if (nextChords) {
       // Take top 5 chords from the list
       const topChords = nextChords.slice(0, 5).map(chord => chord.chord_HTML);
