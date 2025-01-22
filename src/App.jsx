@@ -1,6 +1,6 @@
 import './App.css';
 import './Card.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import chordData from './data/chords.json';
 
@@ -9,7 +9,7 @@ const AUTH_ENDPOINT = 'users/auth';
 const TRENDS_ENDPOINT = 'trends/nodes';
 
 const chordList = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii'];
-const cardList = ['I'];
+const cardList = [];
 
 ShowListCards.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -76,6 +76,37 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
   const [selectedChord, setSelectedChord] = useState('');
   const chordExt = ['', 'min', '7', 'M7', 'min7', 'sus4', 'dim', 'dim7', 'aug', '6', '9', '11', '13'];
 
+  const handleShowNextChords = useCallback(async () => {
+    // Change the chord list to the next most likely chords in the progression
+    // NOTE: useCallback is used to prevent the function from being recreated on every render due to useEffect below
+    
+    // TODO: Add option to send only the last chord progression or the entire progression
+    // Convert the card list to chord IDs to send to the API
+    let cardListString = cards.map(card => chordData.find(chord => chord.chord_HTML === card).chord_ID).join(',');
+    console.log(cardListString);
+
+    // Fetch and process the next possible chords
+    const nextChords = await fetchNextChords(cardListString);
+    
+    if (nextChords) {
+      // Take top 5 chords from the list
+      const topChords = nextChords.slice(0, 5).map(chord => chord.chord_HTML);
+      
+      setChords(topChords);
+      setSelectedChord('');
+    }
+  }, [cards, fetchNextChords]);
+
+  useEffect(() => {
+    // If there are cards in the list, show the next likely chords
+    // Otherwise, show the default chord list
+    if (cards.length > 0) {
+      handleShowNextChords();
+    } else {
+      setChords(chordList);
+    }
+  }, [cards, handleShowNextChords]);
+
   function handleChordClick(chordId) {
     // Get the selected chord
     const chord = chords[chordId];
@@ -90,29 +121,8 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
     // Add the card to the card list
     addCard(chords[cardId]);
     
-    // Reset the chord list and selected chord
-    setChords(chordList);
+    // Reset selected chord
     setSelectedChord('');
-  }
-
-  async function handleShowNextChords() {
-    // Change the chord list to the next most likely chords in the progression
-    
-    if (cards.length === 0) return;
-    
-    // Convert the card list to chord IDs to send to the API
-    let cardListString = cards.map(card => chordData.find(chord => chord.chord_HTML === card).chord_ID).join(',');
-    console.log(cardListString);
-    
-    // Fetch and process the next possible chords
-    const nextChords = await fetchNextChords(cardListString);
-    if (nextChords) {
-      // Take top 5 chords from the list
-      const topChords = nextChords.slice(0, 5).map(chord => chord.chord_HTML);
-      
-      setChords(topChords);
-      setSelectedChord('');
-    }
   }
   
   return (
@@ -136,6 +146,7 @@ function App() {
   const [cards, setCards] = useState(cardList);
   const [authToken, setAuthToken] = useState(null);
 
+  // Log into the Hooktheory API
   const authenticate = async (username, password) => {
     try {
       const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINT}`, {
