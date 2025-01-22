@@ -17,7 +17,9 @@ ShowListCards.propTypes = {
 };
 
 ShowChordCards.propTypes = {
-  addCard: PropTypes.func.isRequired
+  addCard: PropTypes.func.isRequired,
+  cards: PropTypes.arrayOf(PropTypes.string).isRequired,
+  fetchNextChords: PropTypes.func.isRequired
 };
 
 ListCard.propTypes = {
@@ -69,7 +71,7 @@ function ShowListCards({ cards, setCards }) {
   );
 }
 
-function ShowChordCards({ addCard }) {
+function ShowChordCards({ addCard, cards, fetchNextChords }) {
   const [chords, setChords] = useState(chordList);
   const [selectedChord, setSelectedChord] = useState('');
   const chordExt = ['', 'min', '7', 'M7', 'min7', 'sus4', 'dim', 'dim7', 'aug', '6', '9', '11', '13'];
@@ -92,9 +94,32 @@ function ShowChordCards({ addCard }) {
     setChords(chordList);
     setSelectedChord('');
   }
+
+  async function handleShowNextChords() {
+    // Change the chord list to the next most likely chords in the progression
+    
+    if (cards.length === 0) return;
+    
+    // Get the last chord from the progression
+    const lastChord = cards[cards.length - 1];
+    const lastChordID = chordData.find(chord => chord.chord_HTML === lastChord).chord_ID;
+    
+    // Fetch and process the next possible chords
+    const nextChords = await fetchNextChords(lastChordID);
+    if (nextChords) {
+      // Take top 5 chords from the list
+      const topChords = nextChords.slice(0, 5).map(chord => chord.chord_HTML);
+      
+      setChords(topChords);
+      setSelectedChord('');
+    }
+  }
   
   return (
     <div>
+      <div>
+        <button onClick={handleShowNextChords}>Show Next Likely Chords</button>
+      </div>
       {chords.map((chord, id) => (
         <ChordCard 
           key={id} 
@@ -110,7 +135,6 @@ function ShowChordCards({ addCard }) {
 function App() {
   const [cards, setCards] = useState(cardList);
   const [authToken, setAuthToken] = useState(null);
-  const [error, setError] = useState(null);
 
   const authenticate = async (username, password) => {
     try {
@@ -129,12 +153,12 @@ function App() {
       const data = await response.json();
       setAuthToken(data.activkey);
     } catch (err) {
-      setError(err.message);
+      console.log(err.message);
     }
   };
 
-  // Fetch chord progressions
-  const fetchChordProgressions = async (childPath = '') => {
+  // Fetch next possible chords in the progression
+  const fetchNextChords = async (childPath) => {
     if (!authToken) return;
 
     try {
@@ -155,8 +179,9 @@ function App() {
       const data = await response.json();
       // Output chord progression data
       console.log('Chord progressions:', data);
+      return data;
     } catch (err) {
-      setError(err.message);
+      console.log(err.message);
     }
   };
 
@@ -169,20 +194,17 @@ function App() {
     setCards([...cards, newCard]);
   }
 
-  // Debug
-  console.log(chordData.find(chord => chord.chord_HTML === "IV"));
-
   return (
     <div className='container'>
       <div className='left'>
         <ShowListCards cards={cards} setCards={setCards} />
       </div>
       <div className='right'>
-        <ShowChordCards addCard={addCard} />
+        <ShowChordCards addCard={addCard} cards={cards} fetchNextChords={fetchNextChords}/>
       </div>  
       <div className='bottom'>
         Bottom content
-        <button onClick={() => fetchChordProgressions()}>Fetch chord progressions</button>
+        <button onClick={() => fetchNextChords()}>Fetch chord progressions</button>
       </div>
     </div>
 
