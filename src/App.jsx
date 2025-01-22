@@ -127,9 +127,6 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
   
   return (
     <div>
-      <div>
-        <button onClick={handleShowNextChords}>Show Next Likely Chords</button>
-      </div>
       {chords.map((chord, id) => (
         <ChordCard 
           key={id} 
