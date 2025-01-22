@@ -8,7 +8,6 @@ const API_BASE_URL = 'https://api.hooktheory.com/v1/';
 const AUTH_ENDPOINT = 'users/auth';
 const TRENDS_ENDPOINT = 'trends/nodes';
 
-const chordList = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii'];
 const cardList = [];
 
 ShowListCards.propTypes = {
@@ -72,7 +71,7 @@ function ShowListCards({ cards, setCards }) {
 }
 
 function ShowChordCards({ addCard, cards, fetchNextChords }) {
-  const [chords, setChords] = useState(chordList);
+  const [chords, setChords] = useState([]);
   const [selectedChord, setSelectedChord] = useState('');
   const chordExt = ['', 'min', '7', 'M7', 'min7', 'sus4', 'dim', 'dim7', 'aug', '6', '9', '11', '13'];
 
@@ -100,11 +99,7 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
   useEffect(() => {
     // If there are cards in the list, show the next likely chords
     // Otherwise, show the default chord list
-    if (cards.length > 0) {
-      handleShowNextChords();
-    } else {
-      setChords(chordList);
-    }
+    handleShowNextChords();
   }, [cards, handleShowNextChords]);
 
   function handleChordClick(chordId) {
