@@ -88,8 +88,8 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
     const nextChords = await fetchNextChords(lastChordID);
     
     if (nextChords) {
-      // Take top 5 chords from the list
-      const topChords = nextChords.slice(0, 5).map(chord => chord.chord_HTML);
+      // Take top 20 chords from the list
+      const topChords = nextChords.slice(0, 20).map(chord => chord.chord_HTML);
       
       setChords(topChords);
     }
