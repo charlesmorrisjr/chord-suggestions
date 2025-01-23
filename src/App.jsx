@@ -192,7 +192,6 @@ function App() {
       </div>  
       <div className='bottom'>
         Bottom content
-        <button onClick={() => fetchNextChords()}>Fetch chord progressions</button>
       </div>
     </div>
 
