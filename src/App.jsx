@@ -36,18 +36,18 @@ ChordCard.propTypes = {
 
 function ListCard({ id, note, onDelete }) {
   return (
-    <div className="card">
+    <button className="button">
       {note}
       <button className='delete-btn' onClick={() => onDelete(id)}>x</button>
-    </div>
+    </button>
   );
 }
 
 function ChordCard({ id, note, onSelect }) {
   return (
-    <div className="card" onClick={() => onSelect(id)}>
+    <button className="button" onClick={() => onSelect(id)}>
       {note}
-    </div>
+    </button>
   );
 }
 
@@ -58,7 +58,7 @@ function ShowListCards({ cards, setCards }) {
   }
 
   return (
-    <div>
+    <div className='chord-grid'>
       {cards.map((note, id) => (
         <ListCard 
           key={id} 
@@ -107,7 +107,7 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
   }
   
   return (
-    <div>
+    <div className='chord-grid'>
       {chords.map((chord, id) => (
         <ChordCard 
           key={id} 
