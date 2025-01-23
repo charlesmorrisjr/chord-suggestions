@@ -80,12 +80,13 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
     // NOTE: useCallback is used to prevent the function from being recreated on every render due to useEffect below
     
     // TODO: Add option to send only the last chord progression or the entire progression
-    // Convert the card list to chord IDs to send to the API
-    let cardListString = cards.map(card => chordData.find(chord => chord.chord_HTML === card).chord_ID).join(',');
-    console.log(cardListString);
-
+    // Get the last chord from the progression and convert it to a chord ID to send to the API
+    const lastChord = cards[cards.length - 1];
+    const lastChordID = lastChord ? chordData.find(chord => chord.chord_HTML === lastChord).chord_ID : '';
+    console.log(lastChordID);
+    
     // Fetch and process the next possible chords
-    const nextChords = await fetchNextChords(cardListString);
+    const nextChords = await fetchNextChords(lastChordID);
     
     if (nextChords) {
       // Take top 5 chords from the list
