@@ -3,31 +3,21 @@
 }
 
 .container {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Creates two equal columns */
-  grid-template-rows: 1fr auto; /* First row takes remaining space, second row for bottom content */
-  grid-template-areas: 
-    "left right"
-    "bottom bottom";
+  display: flex;
+  flex-direction: column;
   height: 100vh;
-  gap: 10px;
 }
 
-.left {
-  grid-area: left;
+.top {
+  flex: 1;
+  padding: 20px;
   overflow-y: auto;
-  padding: 10px;
-}
-
-.right {
-  grid-area: right;
-  overflow-y: auto;
-  padding: 10px;
 }
 
 .bottom {
-  grid-area: bottom;
-  height: 100px;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 /* Scrollbar styling */

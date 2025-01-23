@@ -185,14 +185,11 @@ function App() {
 
   return (
     <div className='container'>
-      <div className='left'>
+      <div className='top'>
         <ShowListCards cards={cards} setCards={setCards} />
       </div>
-      <div className='right'>
-        <ShowChordCards addCard={addCard} cards={cards} fetchNextChords={fetchNextChords}/>
-      </div>  
       <div className='bottom'>
-        Bottom content
+        <ShowChordCards addCard={addCard} cards={cards} fetchNextChords={fetchNextChords}/>
       </div>
     </div>
 
