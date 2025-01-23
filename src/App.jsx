@@ -72,8 +72,6 @@ function ShowListCards({ cards, setCards }) {
 
 function ShowChordCards({ addCard, cards, fetchNextChords }) {
   const [chords, setChords] = useState([]);
-  const [selectedChord, setSelectedChord] = useState('');
-  const chordExt = ['', 'min', '7', 'M7', 'min7', 'sus4', 'dim', 'dim7', 'aug', '6', '9', '11', '13'];
 
   const handleShowNextChords = useCallback(async () => {
     // Change the chord list to the next most likely chords in the progression
@@ -93,7 +91,6 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
       const topChords = nextChords.slice(0, 5).map(chord => chord.chord_HTML);
       
       setChords(topChords);
-      setSelectedChord('');
     }
   }, [cards, fetchNextChords]);
 
@@ -103,22 +100,9 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
     handleShowNextChords();
   }, [cards, handleShowNextChords]);
 
-  function handleChordClick(chordId) {
-    // Get the selected chord
-    const chord = chords[chordId];
-    setSelectedChord(chord);
-
-    // Create combination of the selected chord with extensions
-    const combinations = chordExt.map(ext => chord + ext);
-    setChords(combinations);
-  }
-
   function handleAdd(cardId) {
     // Add the card to the card list
     addCard(chords[cardId]);
-    
-    // Reset selected chord
-    setSelectedChord('');
   }
   
   return (
@@ -128,7 +112,7 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
           key={id} 
           id={id}
           note={chord}
-          onSelect={selectedChord === '' ? handleChordClick : handleAdd}
+          onSelect={handleAdd}
         />
       ))}
     </div>
