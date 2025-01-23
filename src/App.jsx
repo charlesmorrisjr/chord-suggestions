@@ -2,6 +2,7 @@ import './App.css';
 import './Card.css';
 import './Button.css'
 import { useState, useEffect, useCallback } from 'react';
+import * as Tone from 'tone';
 import PropTypes from 'prop-types';
 import chordData from './data/chords.json';
 
@@ -33,6 +34,23 @@ ChordCard.propTypes = {
   note: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired
 };
+
+function playSample(notes) {
+  const sampler = new Tone.Sampler({
+    urls: {
+      C4: "C4.mp3",
+      "D#4": "Ds4.mp3",
+      "F#4": "Fs4.mp3",
+      A4: "A4.mp3",
+    },
+    release: 1,
+    baseUrl: "https://tonejs.github.io/audio/salamander/",
+  }).toDestination();
+  
+  Tone.loaded().then(() => {
+    sampler.triggerAttackRelease(notes, 1.5);
+  });
+}
 
 function ListCard({ id, note, onDelete }) {
   return (
@@ -107,6 +125,8 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
   function handleAdd(cardId) {
     // Add the card to the card list
     addCard(chords[cardId]);
+    
+    playSample(["C4", "G4", "Bb4"])
   }
   
   return (
