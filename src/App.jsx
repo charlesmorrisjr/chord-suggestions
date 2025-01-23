@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import * as Tone from 'tone';
 import PropTypes from 'prop-types';
 import chordData from './data/chords.json';
+import chordNotesData from './data/chord_notes.json';
 
 const API_BASE_URL = 'https://api.hooktheory.com/v1/';
 const AUTH_ENDPOINT = 'users/auth';
@@ -46,6 +47,8 @@ function playSample(notes) {
     release: 1,
     baseUrl: "https://tonejs.github.io/audio/salamander/",
   }).toDestination();
+  
+  notes = notes.map(note => note + '4');
   
   Tone.loaded().then(() => {
     sampler.triggerAttackRelease(notes, 1.5);
@@ -125,8 +128,16 @@ function ShowChordCards({ addCard, cards, fetchNextChords }) {
   function handleAdd(cardId) {
     // Add the card to the card list
     addCard(chords[cardId]);
+   
+    const chordId = chordData.find(chord => chord.chord_HTML === chords[cardId]).chord_ID;
+    const chordNotes = chordNotesData[chordId];
     
-    playSample(["C4", "G4", "Bb4"])
+    try {
+      playSample(chordNotes);
+    } catch {
+      console.log("Cannot find chord notes");
+      console.log(chordNotes);
+    }
   }
   
   return (
