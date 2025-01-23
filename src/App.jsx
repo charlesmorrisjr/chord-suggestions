@@ -36,9 +36,8 @@ ChordCard.propTypes = {
 
 function ListCard({ id, note, onDelete }) {
   return (
-    <button className="button">
+    <button className="button" onClick={() => onDelete(id)}>
       {note}
-      <button className='delete-btn' onClick={() => onDelete(id)}>x</button>
     </button>
   );
 }
