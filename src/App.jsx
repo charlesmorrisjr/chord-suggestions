@@ -36,17 +36,21 @@ ChordCard.propTypes = {
 
 function ListCard({ id, note, onDelete }) {
   return (
-    <button className="button" onClick={() => onDelete(id)}>
-      {note}
-    </button>
+    <button 
+      className="button" 
+      onClick={() => onDelete(id)}
+      dangerouslySetInnerHTML={{ __html: note}}
+    />
   );
 }
 
 function ChordCard({ id, note, onSelect }) {
   return (
-    <button className="button" onClick={() => onSelect(id)}>
-      {note}
-    </button>
+    <button 
+      className="button" 
+      onClick={() => onSelect(id)}
+      dangerouslySetInnerHTML={{ __html: note}}
+    />
   );
 }
 
