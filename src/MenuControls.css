@@ -1,0 +1,13 @@
+.menu-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 5px 20px;
+    height: 50px;
+    /* border-bottom: 1px solid #e9ecef; */
+}
+
+.menu-controls button svg {
+    width: 32px;
+    height: 32px;
+ }

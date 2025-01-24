@@ -1,9 +1,15 @@
 import './App.css';
 import './Card.css';
-import './Button.css'
+import './Button.css';
+import './MenuControls.css';
+
+
 import { useState, useEffect, useCallback } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faStop, faFileExport } from '@fortawesome/free-solid-svg-icons';
 import * as Tone from 'tone';
 import PropTypes from 'prop-types';
+
 import chordData from './data/chords.json';
 import chordNotesData from './data/chord_notes.json';
 
@@ -53,6 +59,22 @@ function playSample(notes) {
   Tone.loaded().then(() => {
     sampler.triggerAttackRelease(notes, 1.5);
   });
+}
+
+function MenuControls() {
+  return (
+    <div className="menu-controls">
+      <button className="play-button">
+        <FontAwesomeIcon icon={faPlay} />
+      </button>
+      <button className="stop-button">
+        <FontAwesomeIcon icon={faStop} />
+      </button>
+      <button className="export-button">
+        <FontAwesomeIcon icon={faFileExport} />
+      </button>
+    </div>
+  )
 }
 
 function ListCard({ id, note, onDelete }) {
@@ -220,6 +242,7 @@ function App() {
   return (
     <div className='container'>
       <div className='top'>
+        <MenuControls />
         <ShowListCards cards={cards} setCards={setCards} />
       </div>
       <div className='bottom'>
