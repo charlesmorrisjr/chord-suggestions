@@ -62,16 +62,89 @@ function playSample(notes) {
 }
 
 function MenuControls() {
+  function playChordSamples() {
+    const sampler = new Tone.Sampler({
+      urls: {
+        C4: "C4.mp3",
+        "D#4": "Ds4.mp3",
+        "F#4": "Fs4.mp3",
+        A4: "A4.mp3",
+      },
+      release: 1,
+      baseUrl: "https://tonejs.github.io/audio/salamander/",
+    }).toDestination();
+    
+    Tone.loaded().then(() => {
+      sampler.triggerAttackRelease(['C4', 'E4', 'G4'], 1, 0);
+    });
+  }
+
+  function playChords() {
+    // Play the chord progression
+
+    // Define the sequence of chords and their timings
+
+    const chords = [
+      ['C4', 'E4', 'G4'], // C major chord
+      ['D4', 'F4', 'A4'], // D minor chord
+      ['E4', 'G4', 'B4'], // E minor chord
+      ['F4', 'A4', 'C5'], // F major chord
+    ];
+    
+    const aChord = ['C4', 'E4', 'G4'];
+
+    const sampler = new Tone.Sampler({
+      urls: {
+        C4: "C4.mp3",
+        "D#4": "Ds4.mp3",
+        "F#4": "Fs4.mp3",
+        A4: "A4.mp3",
+      },
+      release: 1,
+      baseUrl: "https://tonejs.github.io/audio/salamander/",
+    }).toDestination();
+    
+    // notes = notes.map(note => note + '4');
+    
+    Tone.loaded().then(() => {
+      // Create a sequence
+      const sequence = new Tone.Sequence(
+        (time, chord) => {
+          // Trigger the chord at the given time
+          // sampler.triggerAttackRelease(chord, 1, time);
+        },
+        chords,
+        '4n' // Interval between chords
+      );
+      sequence.loop = false;
+      chords.forEach((chord, time) => {
+        sampler.triggerAttackRelease(chord, 1, time);
+      });
+      // Start the sequence
+      Tone.Transport.start();
+      sequence.start(0);
+      Tone.start();
+    });
+
+  }
+
+  function stopPlayChords() {
+    Tone.getTransport().stop();
+  }
+
+  function exportFile() {
+  }
+    
   return (
     <div className="menu-controls">
       <button className="play-button">
-        <FontAwesomeIcon icon={faPlay} />
+        <FontAwesomeIcon icon={faPlay} onClick={playChords} />
       </button>
       <button className="stop-button">
-        <FontAwesomeIcon icon={faStop} />
+        <FontAwesomeIcon icon={faStop} onClick={stopPlayChords} />
       </button>
       <button className="export-button">
-        <FontAwesomeIcon icon={faFileExport} />
+        <FontAwesomeIcon icon={faFileExport} onClick={exportFile} />
       </button>
     </div>
   )
