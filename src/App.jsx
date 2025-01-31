@@ -19,6 +19,9 @@ const TRENDS_ENDPOINT = 'trends/nodes';
 
 const cardList = [];
 
+const MAJOR_SCALE = [0, 2, 4, 5, 7, 9, 11];
+const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
 ShowListCards.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.string).isRequired,
   setCards: PropTypes.func.isRequired
@@ -42,6 +45,10 @@ ChordCard.propTypes = {
   onSelect: PropTypes.func.isRequired
 };
 
+MenuControls.propTypes = {
+  chords: PropTypes.arrayOf(PropTypes.string).isRequired
+};
+
 function playSample(notes) {
   const sampler = new Tone.Sampler({
     urls: {
@@ -61,37 +68,83 @@ function playSample(notes) {
   });
 }
 
-function MenuControls() {
-  function playChordSamples() {
-    const sampler = new Tone.Sampler({
-      urls: {
-        C4: "C4.mp3",
-        "D#4": "Ds4.mp3",
-        "F#4": "Fs4.mp3",
-        A4: "A4.mp3",
-      },
-      release: 1,
-      baseUrl: "https://tonejs.github.io/audio/salamander/",
-    }).toDestination();
-    
-    Tone.loaded().then(() => {
-      sampler.triggerAttackRelease(['C4', 'E4', 'G4'], 1, 0);
-    });
+function romanToChords(romanNumerals, key = 'C') {
+  // Return null if input is not an array
+  if (!Array.isArray(romanNumerals)) {
+    return null;
   }
 
-  function playChords() {
-    // Play the chord progression
+  return romanNumerals.map(numeral => {
+    // Convert key to number (0-11)
+    const keyIndex = NOTE_NAMES.indexOf(key);
+    if (keyIndex === -1) return null;
 
-    // Define the sequence of chords and their timings
+    // Parse roman numeral
+    const numeralMap = {
+      'I': 0,
+      'II': 1,
+      'III': 2,
+      'IV': 3,
+      'V': 4,
+      'VI': 5,
+      'VII': 6,
+      'i': 0,
+      'ii': 1,
+      'iii': 2,
+      'iv': 3,
+      'v': 4,
+      'vi': 5,
+      'vii': 6
+    };
 
-    const chords = [
-      ['C4', 'E4', 'G4'], // C major chord
-      ['D4', 'F4', 'A4'], // D minor chord
-      ['E4', 'G4', 'B4'], // E minor chord
-      ['F4', 'A4', 'C5'], // F major chord
-    ];
+    // Get the base numeral without any modifiers
+    const baseNumeral = numeral.replace(/[^IViv]+/g, '');
+    const scalePosition = numeralMap[baseNumeral];
     
-    const aChord = ['C4', 'E4', 'G4'];
+    if (scalePosition === undefined) return null;
+
+    // Calculate the root note index
+    const rootIndex = (keyIndex + MAJOR_SCALE[scalePosition]) % 12;
+    
+    // Determine if the chord is major or minor based on case
+    const isMinor = baseNumeral === baseNumeral.toLowerCase();
+    
+    // Handle special cases like diminished (o) or augmented (+)
+    const isDiminished = numeral.includes('o');
+    const isAugmented = numeral.includes('+');
+
+    // Calculate triad intervals based on chord quality
+    let intervals;
+    if (isDiminished) {
+      intervals = [0, 3, 6]; // Root, minor third, diminished fifth
+    } else if (isAugmented) {
+      intervals = [0, 4, 8]; // Root, major third, augmented fifth
+    } else if (isMinor) {
+      intervals = [0, 3, 7]; // Root, minor third, perfect fifth
+    } else {
+      intervals = [0, 4, 7]; // Root, major third, perfect fifth
+    }
+
+    // Create array of notes for the chord
+    return intervals.map(interval => {
+      const noteIndex = (rootIndex + interval) % 12;
+      return NOTE_NAMES[noteIndex] + '4';
+    });
+  });
+}
+
+function MenuControls({ chords }) {
+  console.log(chords);
+  console.log(romanToChords(chords));
+
+
+  function playChords() {
+    // const chords = [
+    //   ['C4', 'E4', 'G4'], // C major chord
+    //   ['D4', 'F4', 'A4'], // D minor chord
+    //   ['E4', 'G4', 'B4'], // E minor chord
+    //   ['F4', 'A4', 'C5'], // F major chord
+    // ];
 
     const sampler = new Tone.Sampler({
       urls: {
@@ -104,32 +157,27 @@ function MenuControls() {
       baseUrl: "https://tonejs.github.io/audio/salamander/",
     }).toDestination();
     
-    // notes = notes.map(note => note + '4');
-    
     Tone.loaded().then(() => {
-      // Create a sequence
-      const sequence = new Tone.Sequence(
-        (time, chord) => {
-          // Trigger the chord at the given time
-          // sampler.triggerAttackRelease(chord, 1, time);
-        },
-        chords,
-        '4n' // Interval between chords
-      );
-      sequence.loop = false;
-      chords.forEach((chord, time) => {
-        sampler.triggerAttackRelease(chord, 1, time);
+      // Reset transport time and state
+      Tone.Transport.stop();
+      Tone.Transport.position = 0;
+      
+      let currentTime = 0;
+      romanToChords(chords).forEach((chord) => {
+        Tone.Transport.schedule((time) => {
+          sampler.triggerAttackRelease(chord, 1, time);
+        }, currentTime);
+        currentTime += 1; // Add 1 second between chords
       });
-      // Start the sequence
-      Tone.Transport.start();
-      sequence.start(0);
-      Tone.start();
-    });
 
+      // Start playback
+      Tone.Transport.start();
+    });
   }
 
   function stopPlayChords() {
-    Tone.getTransport().stop();
+    Tone.Transport.stop();
+    Tone.Transport.position = 0;
   }
 
   function exportFile() {
@@ -315,7 +363,7 @@ function App() {
   return (
     <div className='container'>
       <div className='top'>
-        <MenuControls />
+        <MenuControls chords={cards} />
         <ShowListCards cards={cards} setCards={setCards} />
       </div>
       <div className='bottom'>
