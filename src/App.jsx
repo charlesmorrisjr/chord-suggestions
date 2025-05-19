@@ -49,18 +49,23 @@ MenuControls.propTypes = {
   chords: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
+// Create a single sampler instance at the module level
+const sampler = new Tone.Sampler({
+  urls: {
+    C4: "C4.mp3",
+    "D#4": "Ds4.mp3",
+    "F#4": "Fs4.mp3",
+    A4: "A4.mp3",
+  },
+  release: 1,
+  baseUrl: "https://tonejs.github.io/audio/salamander/",
+}).toDestination();
+
+// Set the volume of the sampler
+sampler.volume.value = -5;
+
+
 function playSample(notes) {
-  const sampler = new Tone.Sampler({
-    urls: {
-      C4: "C4.mp3",
-      "D#4": "Ds4.mp3",
-      "F#4": "Fs4.mp3",
-      A4: "A4.mp3",
-    },
-    release: 1,
-    baseUrl: "https://tonejs.github.io/audio/salamander/",
-  }).toDestination();
-  
   notes = notes.map(note => note + '4');
   
   Tone.loaded().then(() => {
@@ -137,27 +142,10 @@ function MenuControls({ chords }) {
   console.log(chords);
   console.log(romanToChords(chords));
 
-
   function playChords() {
-    // const chords = [
-    //   ['C4', 'E4', 'G4'], // C major chord
-    //   ['D4', 'F4', 'A4'], // D minor chord
-    //   ['E4', 'G4', 'B4'], // E minor chord
-    //   ['F4', 'A4', 'C5'], // F major chord
-    // ];
-
-    const sampler = new Tone.Sampler({
-      urls: {
-        C4: "C4.mp3",
-        "D#4": "Ds4.mp3",
-        "F#4": "Fs4.mp3",
-        A4: "A4.mp3",
-      },
-      release: 1,
-      baseUrl: "https://tonejs.github.io/audio/salamander/",
-    }).toDestination();
-    
     Tone.loaded().then(() => {
+      // Clear all scheduled events
+      Tone.Transport.cancel();
       // Reset transport time and state
       Tone.Transport.stop();
       Tone.Transport.position = 0;
@@ -167,7 +155,7 @@ function MenuControls({ chords }) {
         Tone.Transport.schedule((time) => {
           sampler.triggerAttackRelease(chord, 1, time);
         }, currentTime);
-        currentTime += 1; // Add 1 second between chords
+        currentTime += 1;
       });
 
       // Start playback
